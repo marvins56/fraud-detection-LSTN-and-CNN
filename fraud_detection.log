@@ -3963,3 +3963,8 @@ TypeError: '>' not supported between instances of 'str' and 'datetime.datetime'
 2024-11-18 00:23:27,106 - INFO -  * Detected change in 'C:\\Users\\DELL\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python310\\site-packages\\werkzeug\\wrappers\\request.py', reloading
 2024-11-18 00:23:27,137 - INFO -  * Detected change in 'C:\\Users\\DELL\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python310\\site-packages\\werkzeug\\sansio\\request.py', reloading
 2024-11-18 00:23:27,181 - INFO -  * Detected change in 'C:\\Users\\DELL\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python310\\site-packages\\flask\\app.py', reloading
+2024-11-18 00:23:31,966 - INFO -  * Restarting with watchdog (windowsapi)
+2024-11-18 00:23:39,805 - WARNING -  * Debugger is active!
+2024-11-18 00:23:39,815 - INFO -  * Debugger PIN: 636-459-418
+2024-11-18 00:23:39,983 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2024-11-18 00:23:40,150 - INFO - 127.0.0.1 - - [18/Nov/2024 00:23:40] "GET /api/flagged/data HTTP/1.1" 200 -
