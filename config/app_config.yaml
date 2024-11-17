@@ -1,0 +1,18 @@
+app:
+  title: "Fraud Detection System"
+  description: "Real-time transaction monitoring and fraud detection"
+  version: "1.0.0"
+
+dashboard:
+  update_interval: 1  # seconds
+  max_transactions: 1000  # max transactions to keep in memory
+  time_windows: [15, 30, 60, 360, 720]  # minutes
+
+alerts:
+  risk_threshold: 75  # minimum risk score for high-risk alerts
+  notification_email: "alerts@example.com"
+
+visualization:
+  chart_height: 300
+  max_points: 1000
+  color_scheme: "category10"

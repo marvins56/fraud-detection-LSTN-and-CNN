@@ -1,0 +1,52 @@
+<!-- templates/dashboard.html -->
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Fraud Detection{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="control-panel">
+        <button id="simulationControl" class="btn">Start Simulation</button>
+        <button id="resetSimulation" class="btn">Reset</button>
+        <span class="simulation-status">Status: <span id="statusText">Stopped</span></span>
+    </div>
+
+    <div class="metrics-container">
+        <div class="metric-card">
+            <h3>Total Transactions</h3>
+            <div id="totalTransactions" class="value">0</div>
+        </div>
+        <div class="metric-card">
+            <h3>Flagged Transactions</h3>
+            <div id="flaggedTransactions" class="value">0</div>
+        </div>
+        <div class="metric-card">
+            <h3>Fraud Rate</h3>
+            <div id="fraudRate" class="value">0%</div>
+        </div>
+        <div class="metric-card">
+            <h3>Average Amount</h3>
+            <div id="averageAmount" class="value">$0.00</div>
+        </div>
+    </div>
+    
+    <div class="charts-container">
+        <div class="chart-container">
+            <div id="transactionChart"></div>
+        </div>
+        <div class="chart-container">
+            <div id="riskDistribution"></div>
+        </div>
+    </div>
+    
+    <div class="transactions-container">
+        <h2>Recent Transactions</h2>
+        <div id="transactionsTable"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

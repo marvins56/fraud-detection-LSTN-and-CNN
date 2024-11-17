@@ -1,0 +1,40 @@
+rules:
+  - rule_id: "R001"
+    name: "High Amount Transaction"
+    description: "Transaction amount exceeds threshold"
+    priority: 3
+    conditions:
+      amount_threshold: 5000
+
+  - rule_id: "R002"
+    name: "High Frequency Trading"
+    description: "Multiple transactions in short time window"
+    priority: 2
+    conditions:
+      frequency_threshold: 5
+      time_window: 15  # minutes
+
+  - rule_id: "R003"
+    name: "High Risk Location"
+    description: "Transaction from high-risk location"
+    priority: 2
+    conditions:
+      location_risk: true
+      high_risk_locations:
+        - "Location A"
+        - "Location B"
+
+  - rule_id: "R004"
+    name: "Suspicious Time"
+    description: "Transaction during high-risk hours"
+    priority: 1
+    conditions:
+      time_risk: true
+      high_risk_hours: [0, 1, 2, 3, 4, 5]
+
+  - rule_id: "R005"
+    name: "High ML Risk Score"
+    description: "ML model indicates high fraud probability"
+    priority: 3
+    conditions:
+      ml_probability_threshold: 0.8
