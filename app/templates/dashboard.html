@@ -1,4 +1,3 @@
-<!-- templates/dashboard.html -->
 {% extends "base.html" %}
 
 {% block title %}Dashboard - Fraud Detection{% endblock %}
@@ -6,47 +5,101 @@
 {% block content %}
 <div class="dashboard-container">
     <div class="control-panel">
-        <button id="simulationControl" class="btn">Start Simulation</button>
-        <button id="resetSimulation" class="btn">Reset</button>
+        <button id="simulationControl" class="btn primary">Start Simulation</button>
+        <button id="resetSimulation" class="btn secondary">Reset</button>
         <span class="simulation-status">Status: <span id="statusText">Stopped</span></span>
     </div>
 
-    <div class="metrics-container">
-        <div class="metric-card">
-            <h3>Total Transactions</h3>
-            <div id="totalTransactions" class="value">0</div>
+    <div class="metrics-grid">
+        <div class="metric-card total-transactions">
+            <div class="metric-icon">📊</div>
+            <div class="metric-content">
+                <h3>Total Transactions</h3>
+                <div id="totalTransactions" class="value">0</div>
+                <div class="trend" id="transactionsTrend"></div>
+            </div>
         </div>
-        <div class="metric-card">
-            <h3>Flagged Transactions</h3>
-            <div id="flaggedTransactions" class="value">0</div>
+        <div class="metric-card flagged-transactions">
+            <div class="metric-icon">⚠️</div>
+            <div class="metric-content">
+                <h3>Flagged Transactions</h3>
+                <div id="flaggedTransactions" class="value">0</div>
+                <div class="trend" id="flaggedTrend"></div>
+            </div>
         </div>
-        <div class="metric-card">
-            <h3>Fraud Rate</h3>
-            <div id="fraudRate" class="value">0%</div>
+        <div class="metric-card fraud-rate">
+            <div class="metric-icon">🎯</div>
+            <div class="metric-content">
+                <h3>Fraud Rate</h3>
+                <div id="fraudRate" class="value">0%</div>
+                <div class="trend" id="fraudRateTrend"></div>
+            </div>
         </div>
-        <div class="metric-card">
-            <h3>Average Amount</h3>
-            <div id="averageAmount" class="value">$0.00</div>
+        <div class="metric-card average-amount">
+            <div class="metric-icon">💰</div>
+            <div class="metric-content">
+                <h3>Average Amount</h3>
+                <div id="averageAmount" class="value">$0.00</div>
+                <div class="trend" id="amountTrend"></div>
+            </div>
         </div>
     </div>
-    
-    <div class="charts-container">
+
+    <div class="charts-grid">
         <div class="chart-container">
-            <div id="transactionChart"></div>
+            <div class="chart-header">
+                <h3>Real-time Transaction Flow</h3>
+                <div class="chart-controls">
+                    <select id="timeRangeSelect">
+                        <option value="1h">Last Hour</option>
+                        <option value="6h">Last 6 Hours</option>
+                        <option value="24h">Last 24 Hours</option>
+                    </select>
+                </div>
+            </div>
+            <div id="realtimeChart"></div>
         </div>
+        
         <div class="chart-container">
-            <div id="riskDistribution"></div>
+            <div class="chart-header">
+                <h3>Risk Distribution</h3>
+                <div class="chart-controls">
+                    <button id="toggleRiskView">Toggle View</button>
+                </div>
+            </div>
+            <div id="riskDistributionChart"></div>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Amount vs Risk Analysis</h3>
+            </div>
+            <div id="amountRiskChart"></div>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Recent Alerts</h3>
+                <div class="chart-controls">
+                    <button id="refreshAlerts">Refresh</button>
+                </div>
+            </div>
+            <div id="recentAlerts" class="alerts-container"></div>
         </div>
     </div>
-    
-    <div class="transactions-container">
-        <h2>Recent Transactions</h2>
+
+    <div class="recent-transactions">
+        <h3>Latest Transactions</h3>
         <div id="transactionsTable"></div>
+        <div class="table-pagination">
+            <button id="prevPage">Previous</button>
+            <span id="pageInfo">Page 1</span>
+            <button id="nextPage">Next</button>
+        </div>
     </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 {% endblock %}

@@ -1,20 +1,15 @@
-<!-- templates/analytics.html -->
 {% extends "base.html" %}
 
 {% block title %}Analytics - Fraud Detection{% endblock %}
 
 {% block content %}
 <div class="analytics-container">
-    <div class="simulation-status-bar">
-        Simulation Status: <span class="simulation-status">Stopped</span>
-    </div>
-    
     <div class="charts-grid">
         <div class="chart-container">
             <div id="volumeTimeline"></div>
         </div>
         <div class="chart-container">
-            <div id="riskHeatmap"></div>
+            <div id="riskDistribution"></div>
         </div>
         <div class="chart-container">
             <div id="amountHistogram"></div>

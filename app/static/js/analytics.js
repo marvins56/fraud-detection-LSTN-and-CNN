@@ -1,69 +1,143 @@
-// static/js/analytics.js
 const AnalyticsCharts = {
     initialize: function() {
+        console.log('Initializing AnalyticsCharts...');
         this.createAllCharts();
         this.setupAutoRefresh();
+        this.loadInitialData();
+    },
+    
+    loadInitialData: function() {
+        $.get('/api/analytics/data')
+            .done(data => {
+                console.log('Received analytics data:', data);
+                this.updateAllCharts(data);
+            })
+            .fail(error => {
+                console.error('Failed to fetch initial analytics data:', error);
+            });
     },
     
     createAllCharts: function() {
         // Transaction Volume Timeline
+        const volumeLayout = {
+            title: 'Transaction Volume by Hour',
+            xaxis: { title: 'Hour of Day' },
+            yaxis: { title: 'Number of Transactions' },
+            height: 400
+        };
+        
         ChartManager.createChart('volumeTimeline', {
             data: [{
-                type: 'scatter',
-                mode: 'lines+markers'
+                x: [],
+                y: [],
+                type: 'bar'
             }],
-            layout: {
-                title: 'Transaction Volume Over Time',
-                height: 400
-            }
+            layout: volumeLayout
         });
+
+        // Risk Distribution
+        const riskLayout = {
+            title: 'Risk Level Distribution',
+            height: 400
+        };
         
-        // Risk Distribution Heatmap
-        ChartManager.createChart('riskHeatmap', {
+        ChartManager.createChart('riskDistribution', {
             data: [{
-                type: 'heatmap',
-                colorscale: 'Viridis'
+                values: [],
+                labels: [],
+                type: 'pie'
             }],
-            layout: {
-                title: 'Risk Distribution by Hour and Day',
-                height: 400
-            }
+            layout: riskLayout
         });
+
+        // Amount Distribution
+        const amountLayout = {
+            title: 'Transaction Amount Distribution',
+            xaxis: { title: 'Amount ($)' },
+            yaxis: { title: 'Count' },
+            height: 400
+        };
         
-        // Amount Distribution Histogram
         ChartManager.createChart('amountHistogram', {
             data: [{
+                x: [],
+                y: [],
                 type: 'histogram',
                 nbinsx: 30
             }],
-            layout: {
-                title: 'Transaction Amount Distribution',
-                height: 400
-            }
+            layout: amountLayout
         });
+
+        // Fraud Patterns
+        const fraudLayout = {
+            title: 'Fraud by Pattern Type',
+            height: 400
+        };
         
-        // Fraud Patterns Parallel Coordinates
         ChartManager.createChart('fraudPatterns', {
             data: [{
-                type: 'parcoords',
-                line: {
-                    color: 'blue'
-                }
+                values: [],
+                labels: [],
+                type: 'pie'
             }],
-            layout: {
-                title: 'Fraud Pattern Analysis',
-                height: 500
-            }
+            layout: fraudLayout
+        });
+    },
+    
+    updateAllCharts: function(data) {
+        // Update volume timeline
+        const hours = Object.keys(data.hourly_transactions);
+        const counts = Object.values(data.hourly_transactions);
+        
+        ChartManager.updateChart('volumeTimeline', {
+            x: [hours],
+            y: [counts]
+        });
+
+        // Update risk distribution
+        const riskLabels = Object.keys(data.risk_distribution);
+        const riskValues = Object.values(data.risk_distribution);
+        
+        ChartManager.updateChart('riskDistribution', {
+            values: [riskValues],
+            labels: [riskLabels]
+        });
+
+        // Update amount distribution
+        if (data.risk_by_amount && data.risk_by_amount.length > 0) {
+            const amounts = data.risk_by_amount.map(item => item[0]);
+            
+            ChartManager.updateChart('amountHistogram', {
+                x: [amounts]
+            });
+        }
+
+        // Update fraud patterns
+        const fraudLabels = Object.keys(data.fraud_by_type);
+        const fraudValues = Object.values(data.fraud_by_type);
+        
+        ChartManager.updateChart('fraudPatterns', {
+            values: [fraudValues],
+            labels: [fraudLabels]
         });
     },
     
     setupAutoRefresh: function() {
-        setInterval(() => this.refreshData(), 30000);
-    },
-    
-    refreshData: function() {
-        $.get('/api/analytics/data')
-            .done(data => this.updateAllCharts(data))
-            .fail(error => console.error('Failed to fetch analytics data:', error));
+        // Refresh every 30 seconds
+        setInterval(() => {
+            $.get('/api/analytics/data')
+                .done(data => this.updateAllCharts(data))
+                .fail(error => console.error('Failed to fetch analytics data:', error));
+        }, 30000);
+
+        // Also update when new transactions come in
+        $(document).on('transactionGenerated', (event, transaction) => {
+            this.loadInitialData();
+        });
     }
 };
+
+// Initialize when document is ready
+$(document).ready(function() {
+    AnalyticsCharts.initialize();
+});

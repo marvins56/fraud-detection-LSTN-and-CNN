@@ -1,3 +1,5 @@
+
+
 <!-- templates/base.html -->
 <!DOCTYPE html>
 <html>
@@ -6,6 +8,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- Add simulation state management -->
+    <script src="{{ url_for('static', filename='js/simulationState.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/debug.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/chartManager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/transactionTable.js') }}"></script>
     {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -15,12 +22,14 @@
             <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
             <a href="{{ url_for('main.analytics') }}">Analytics</a>
             <a href="{{ url_for('main.flagged_reviews') }}">Flagged Transactions</a>
-   <!-- Core Application Scripts -->
-   <script src="{{ url_for('static', filename='js/debug.js') }}"></script>
-   <script src="{{ url_for('static', filename='js/simulationState.js') }}"></script>
-   <script src="{{ url_for('static', filename='js/chartManager.js') }}"></script>
-   <script src="{{ url_for('static', filename='js/transactionTable.js') }}"></script>
         </nav>
+        <!-- Add simulation controls to header -->
+        <div class="simulation-controls">
+            <button class="simulation-control" onclick="SimulationState.toggleSimulation()">
+                Start Simulation
+            </button>
+            <span class="simulation-status">Stopped</span>
+        </div>
     </header>
 
     <div class="container">
@@ -28,5 +37,15 @@
     </div>
 
     {% block scripts %}{% endblock %}
+    
+    <script>
+        // Handle transaction updates across all pages
+        $(document).on('transactionGenerated', function(event, transaction) {
+            // Update page-specific content
+            if (typeof updatePageContent === 'function') {
+                updatePageContent(transaction);
+            }
+        });
+    </script>
 </body>
 </html>
